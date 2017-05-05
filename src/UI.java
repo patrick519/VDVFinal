@@ -13,6 +13,9 @@ class UI extends JFrame {
     public JPanel panel;
     public JComponent speelVeld;
     public PlayBoard bord;
+    public Frame tabelFrame;
+    public JPanel tabelPanel;
+
 
 
     public UI(PlayBoard var1) {
@@ -44,37 +47,43 @@ class UI extends JFrame {
         this.setTitle("Vang de Volger");
         this.setDefaultCloseOperation(3);
         //panel.add(var6);
-        setContentPane(panel);
-        setSize((aantVakjes * afmetingVakje)+ 500, (aantVakjes * afmetingVakje) + 500);
-        setLayout(new GridBagLayout());
-        maakLayout();
-        setVisible(true);
+        this.setContentPane(panel);
+        this.setSize((aantVakjes * afmetingVakje)+ 500, (aantVakjes * afmetingVakje) + 500);
+        this.setLayout(new GridBagLayout());
+        this.maakLayout();
+        this.setVisible(true);
         this.pack();
         this.setVisible(true);
 
     }
 
     public void maakLayout() {
-        GridBagConstraints layout = new GridBagConstraints();
+        GridBagConstraints c = new GridBagConstraints();
 
-        layout.fill = GridBagConstraints.BOTH;
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.weightx = 0.5;
+        c.gridx = 0;
+        c.gridy = 0;
+        panel.add(pauzeKnop, c);
 
-        layout.gridx = 0;
-        layout.gridy = 0;
-        layout.weightx = 1.0;
-        layout.weighty = 1.0;
-        layout.gridheight = 2;
-        panel.add(speelVeld, layout);
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.weightx = 0.5;
+        c.gridx = 1;
+        c.gridy = 0;
 
-        layout.gridx = 1;
-        layout.gridy = 0;
-        layout.weightx = 0;
-        layout.weighty = 1;
-        layout.gridheight = 1;
-        panel.add(pauzeKnop, layout);
+        panel.add(resetKnop, c);
+        c.fill = GridBagConstraints.BOTH;
 
-        layout.gridy = 1;
-        panel.add(resetKnop, layout);
+
+
+        c.gridx = 0;
+        c.gridy = 1;
+        c.gridheight = 1;
+        c.gridwidth = 2;
+        panel.add(speelVeld, c);
+
+
+
 
     }
 
@@ -85,7 +94,9 @@ class UI extends JFrame {
 
     public class veld extends JComponent {
         veld (int rij, int kolom) {
-            setMinimumSize(new Dimension(afmetingVakje * aantVakjes, afmetingVakje * aantVakjes));
+            this.setMinimumSize(new Dimension(afmetingVakje * aantVakjes, afmetingVakje * aantVakjes));
+            this.setPreferredSize(new Dimension(afmetingVakje * aantVakjes, afmetingVakje * aantVakjes));
+            this.setMaximumSize(new Dimension(afmetingVakje * aantVakjes, afmetingVakje * aantVakjes));
         }
 
         @Override
