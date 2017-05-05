@@ -7,7 +7,7 @@ public class Box extends GameObject {
     public Box() {
         this.color = Color.lightGray;
         this.movable = true;
-        this.display = "B ";
+        this.display = "B";
     }
 }
 

@@ -13,8 +13,8 @@ class UI extends JFrame {
     public JPanel panel;
     public JComponent speelVeld;
     public PlayBoard bord;
-    public Frame tabelFrame;
-    public JPanel tabelPanel;
+    public JTable var6;
+
 
 
 
@@ -42,11 +42,11 @@ class UI extends JFrame {
                 }
             }
         }
-        JTable var6 = new JTable(var3, var2);
+        var6 = new JTable(var3, var2);
 
         this.setTitle("Vang de Volger");
         this.setDefaultCloseOperation(3);
-        //panel.add(var6);
+
         this.setContentPane(panel);
         this.setSize((aantVakjes * afmetingVakje)+ 500, (aantVakjes * afmetingVakje) + 500);
         this.setLayout(new GridBagLayout());
@@ -70,17 +70,17 @@ class UI extends JFrame {
         c.weightx = 0.5;
         c.gridx = 1;
         c.gridy = 0;
-
         panel.add(resetKnop, c);
+
         c.fill = GridBagConstraints.BOTH;
-
-
-
         c.gridx = 0;
         c.gridy = 1;
         c.gridheight = 1;
         c.gridwidth = 2;
         panel.add(speelVeld, c);
+
+        c.gridx = 2;
+        panel.add(var6, c);
 
 
 
@@ -118,16 +118,27 @@ class UI extends JFrame {
         private void tekenCell(Graphics g, PlayBoard board, int i, int j) {
             g.setColor(Color.yellow);
             if (board.IsObject(i,j)) {
-                System.out.print("i: " + i + " j: " + j + " " );
-                g.setColor(Color.red);
+                System.out.println("i:" + i + " j:" + j + " " + board.Display(i,j));
+                g.setColor(getCellcolor(board.Display(i,j)));
             }
 
             g.fillRect(i * afmetingVakje, j * afmetingVakje, afmetingVakje, afmetingVakje);
         }
 
-        private Color getColor(String input) {
-            System.out.println(input);
-            return Color.red;
+        private Color getCellcolor(String input) {
+            switch (input) {
+                case "X":
+                    return Color.MAGENTA;
+                case "P":
+                    return Color.blue;
+                case "E":
+                    return Color.red;
+                case "B":
+                    return Color.black;
+                default:
+                    return Color.yellow;
+
+            }
         }
     }
 }

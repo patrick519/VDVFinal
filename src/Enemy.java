@@ -7,6 +7,6 @@ public class Enemy extends GameObject {
     public Enemy() {
         this.color = Color.red;
         this.movable = true;
-        this.display = "E ";
+        this.display = "E";
     }
 }

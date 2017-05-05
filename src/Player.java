@@ -7,6 +7,6 @@ public class Player extends GameObject {
     public Player() {
         this.color = Color.yellow;
         this.movable = true;
-        this.display = "P ";
+        this.display = "P";
     }
 }
