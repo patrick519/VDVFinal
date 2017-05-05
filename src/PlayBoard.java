@@ -5,6 +5,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import java.awt.Color;
+
+//ParentClass of the game
+
 public class PlayBoard {
 
     //Constructor
@@ -18,10 +25,7 @@ public class PlayBoard {
         for(int i = 0; i < x; i++)
             for(int j = 0; j < y; j++)
                 this.baseBoard[i][j] = new Cell();
-
-        this.SetNeighbors();
-        this.SetPlayer();
-        this.SetEnemy();
+        this.InitNeighbors();
     } //PlayBoard
 
     //Support functions------------------------------------
@@ -31,7 +35,7 @@ public class PlayBoard {
         return cll;
     } //GetCell
 
-    private void SetNeighbors(){
+    private void InitNeighbors(){
         Cell curr;
         for (int i = 0; i < this.maxX; i++)
             for (int j = 0; j < this.maxY; j++){
@@ -43,22 +47,17 @@ public class PlayBoard {
             } //for
     } //SetNeighbors
 
-    public void SetPlayer() {
-        Cell temp = this.GetCell(0, 0);
-        temp.gobj = new Player();
-    } //SetPlayer
-
-    public void SetEnemy() {
-        Cell temp = this.GetCell(this.maxX - 1, this.maxY - 1);
-        temp.gobj = new Enemy();
-    } //SetEnemy
-
     //Default operations-----------------------------------
 
     public boolean IsObject(int x, int y) {
         Cell temp = this.GetCell(x,y);
         return temp.gobj != null;
     } //IsObject
+
+    public void DelObject(int x, int y) {
+        Cell temp = this.GetCell(x,y);
+        temp.gobj = null;
+    } //DelObject
 
     public void SetBlock(int x, int y) {
         Cell temp = this.GetCell(x,y);
@@ -70,41 +69,29 @@ public class PlayBoard {
         temp.gobj = new Box();
     } //SetBox
 
-    public void DelObject(int x, int y) {
+    public void SetPlayer(int x, int y) {
         Cell temp = this.GetCell(x,y);
-        temp.gobj = null;
-    } //DelObject
+        temp.gobj = new Player();
+    } //SetPlayer
 
-    public void SetRandom(int perBlk, int perBox){
-        Random rand = new Random();
-        int randX, randY, percent;
-        //fill % Blocks
-        percent = (boardSize*perBlk)/100;
-        for (int i = 0; i < percent; i++){
-            randX = rand.nextInt(this.maxX);
-            randY = rand.nextInt(this.maxY);
-            if (!IsObject(randX,randY))
-                SetBlock(randX,randY);
-            else
-                i--;
-        } //for
-        //fill % Boxes
-        percent = (boardSize*perBox)/100;
-        for (int i = 0; i < percent; i++){
-            randX = rand.nextInt(this.maxX);
-            randY = rand.nextInt(this.maxY);
-            if (!IsObject(randX,randY))
-                SetBox(randX,randY);
-            else
-                i--;
-        } //for
-    } //SetRandom
+    public void SetEnemy(int x, int y) {
+        Cell temp = this.GetCell(x,y);
+        temp.gobj = new Enemy();
+    } //SetEnemy
 
-    //UI operations
+    //UI operations---------------------------------------
+
     public String Display(int x, int y){
         Cell temp = this.GetCell(x,y);
         return temp.gobj.getDisplay();
     } //Display
+
+    public Color GetColor(int x, int y){
+        Cell temp = this.GetCell(x,y);
+        return temp.gobj.color;
+    } //GetColor
+
+    //Variables-------------------------------------------
 
     public int maxX, maxY, boardSize;
     //Declaring the 2D objectArray

@@ -1,13 +1,20 @@
 /**
  * Created by pepij on 4-5-2017.
  */
-class Cell {
-    public GameObject gobj = null;
-    public Cell L = null;
-    public Cell R;
-    public Cell T;
-    public Cell B;
+import java.util.*;
 
-    public Cell() {
+class Cell{
+    //Constructor
+    public Cell(){
+        L = null;
+        gobj = null;
     }
+    public GameObject gobj;
+    public Cell L,R,T,B;
 }
+
+//           Top
+//       _____________
+//  Left |   gobj    | Right
+//       -------------
+//           Bottom

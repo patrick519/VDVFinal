@@ -3,6 +3,8 @@
  */
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
 
 class UI extends JFrame {
@@ -14,6 +16,8 @@ class UI extends JFrame {
     public JComponent speelVeld;
     public PlayBoard bord;
     public JTable var6;
+    boolean key_right, key_left, key_down, key_up; // Input booleans
+
 
     public UI(PlayBoard var1) {
         super();
@@ -24,6 +28,7 @@ class UI extends JFrame {
         speelVeld = new veld(aantVakjes, aantVakjes);
 
         this.setFocusable(true);
+        panel.addKeyListener(new KeyInput());
         this.requestFocusInWindow();
 
 
@@ -43,16 +48,28 @@ class UI extends JFrame {
 
         this.setTitle("Vang de Volger");
         this.setDefaultCloseOperation(3);
-
         this.setContentPane(panel);
         this.setSize((aantVakjes * afmetingVakje)+ 500, (aantVakjes * afmetingVakje) + 500);
         this.setLayout(new GridBagLayout());
         this.maakLayout();
-        this.setVisible(true);
         this.pack();
         this.setVisible(true);
 
     }
+
+//    public class GamePanel extends JPanel {
+//        boolean key_right, key_left, key_down, key_up; // Input booleans
+//
+//        public GamePanel() {
+//            this.setFocusable(true);
+//            addKeyListener(new KeyInput());
+//        }
+//
+//        public void paintComponent(Graphics g) {
+//
+//        }
+//    }
+
 
     public void maakLayout() {
         GridBagConstraints c = new GridBagConstraints();
@@ -106,33 +123,51 @@ class UI extends JFrame {
                     tekenCell(g, bord, i, j);
                 }
             }
+            g.setColor(Color.pink);
+            if(key_down) {
+                //y ++
+                g.setColor(Color.PINK);
+            }
+            if (key_up) { //y--
+                g.setColor(Color.MAGENTA);
+            }
+            if (key_right) {
+                g.setColor(Color.YELLOW);
+                //x++
+            }
+            if (key_left) {
+                g.setColor(Color.BLUE);
+                //x--
+            }
 
+            g.fillRect(0, 0, afmetingVakje, afmetingVakje);
         }
 
         private void tekenCell(Graphics g, PlayBoard board, int i, int j) {
-            g.setColor(Color.yellow);
             if (board.IsObject(i,j)) {
-
-                g.setColor(getCellcolor(board.Display(i,j)));
+                g.setColor(board.GetColor(i,j));
             }
+            else
+                g.setColor(Color.white);
 
             g.fillRect(j * afmetingVakje, i * afmetingVakje, afmetingVakje, afmetingVakje);
         }
+    }
+    private class KeyInput implements KeyListener {
+        public void keyTyped(KeyEvent e) {}
 
-        private Color getCellcolor(String input) {
-            switch (input) {
-                case "X":
-                    return Color.MAGENTA;
-                case "P":
-                    return Color.blue;
-                case "E":
-                    return Color.red;
-                case "B":
-                    return Color.black;
-                default:
-                    return Color.yellow;
+        public void keyReleased(KeyEvent e) {
+            if (e.getKeyCode() == e.VK_DOWN) key_down = false;
+            if (e.getKeyCode() == e.VK_UP) key_up= false;
+            if (e.getKeyCode() == e.VK_RIGHT) key_right= false;
+            if (e.getKeyCode() == e.VK_LEFT) key_left = false;
+        }
 
-            }
+        public void keyPressed(KeyEvent e) {
+            if (e.getKeyCode() == e.VK_DOWN) key_down = true;
+            if (e.getKeyCode() == e.VK_UP) key_up= true;
+            if (e.getKeyCode() == e.VK_RIGHT) key_right= true;
+            if (e.getKeyCode() == e.VK_LEFT) key_left = true;
         }
     }
 }

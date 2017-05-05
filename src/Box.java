@@ -3,6 +3,8 @@
  */
 import java.awt.Color;
 
+//ChildClass of GameObject
+
 public class Box extends GameObject {
     public Box() {
         this.color = Color.lightGray;
