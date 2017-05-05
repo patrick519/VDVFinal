@@ -13,6 +13,5 @@ class VangDeVolgerMain {
     public static void main(String[] args){
 
         VangDeVolgerMain spel = new VangDeVolgerMain();
-
     }
 }

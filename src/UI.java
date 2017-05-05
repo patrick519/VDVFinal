@@ -3,6 +3,8 @@
  */
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
@@ -16,21 +18,36 @@ class UI extends JFrame {
     public JComponent speelVeld;
     public PlayBoard bord;
     public JTable var6;
-    boolean key_right, key_left, key_down, key_up; // Input booleans
 
 
     public UI(PlayBoard var1) {
         super();
-        panel = new JPanel();
+        panel = new GamePanel();
         pauzeKnop = new JButton("Pauze");
         resetKnop = new JButton("Reset");
         bord = var1;
         speelVeld = new veld(aantVakjes, aantVakjes);
 
-        this.setFocusable(true);
-        panel.addKeyListener(new KeyInput());
+
         this.requestFocusInWindow();
 
+        pauzeKnop.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                infoBox("Het Spel is Gepauzeerd, klik op OK om verder te gaan.", "PAUSED");
+                //GAME OP PAUZE ZETTEN
+
+            }
+        });
+
+        resetKnop.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                //reset
+
+            }
+        });
 
         String[] var2 = new String[]{"", "", "", "", "", "", "", "", "", ""};
         Object[][] var3 = new Object[aantVakjes][aantVakjes];
@@ -54,21 +71,59 @@ class UI extends JFrame {
         this.maakLayout();
         this.pack();
         this.setVisible(true);
-
+        checkGame();
     }
 
-//    public class GamePanel extends JPanel {
-//        boolean key_right, key_left, key_down, key_up; // Input booleans
-//
-//        public GamePanel() {
-//            this.setFocusable(true);
-//            addKeyListener(new KeyInput());
-//        }
-//
-//        public void paintComponent(Graphics g) {
-//
-//        }
-//    }
+
+    public class GamePanel extends JPanel {
+        boolean key_right, key_left, key_down, key_up; // Input booleans
+
+        public GamePanel() {
+            this.setFocusable(true);
+            addKeyListener(new KeyInput());
+        }
+
+        public void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            if(key_down) {
+                //y ++
+                //bord.MovePlayer('D');
+                bord.SetPlayer(4,0);
+
+            }
+            if (key_up) { //y--
+                //bord.MovePlayer('U')
+                bord.SetPlayer(2,5);
+            }
+            if (key_right) {
+                bord.SetPlayer(2,0);
+                //x++
+            }
+            if (key_left) {
+                bord.SetPlayer(0,0);
+                //x--
+            }
+            repaint();
+        }
+
+        private class KeyInput implements KeyListener {
+            public void keyTyped(KeyEvent e) {}
+
+            public void keyReleased(KeyEvent e) {
+                if (e.getKeyCode() == e.VK_DOWN) key_down = false;
+                if (e.getKeyCode() == e.VK_UP) key_up= false;
+                if (e.getKeyCode() == e.VK_RIGHT) key_right= false;
+                if (e.getKeyCode() == e.VK_LEFT) key_left = false;
+            }
+
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == e.VK_DOWN) key_down = true;
+                if (e.getKeyCode() == e.VK_UP) key_up= true;
+                if (e.getKeyCode() == e.VK_RIGHT) key_right= true;
+                if (e.getKeyCode() == e.VK_LEFT) key_left = true;
+            }
+        }
+    }
 
 
     public void maakLayout() {
@@ -123,24 +178,7 @@ class UI extends JFrame {
                     tekenCell(g, bord, i, j);
                 }
             }
-            g.setColor(Color.pink);
-            if(key_down) {
-                //y ++
-                g.setColor(Color.PINK);
-            }
-            if (key_up) { //y--
-                g.setColor(Color.MAGENTA);
-            }
-            if (key_right) {
-                g.setColor(Color.YELLOW);
-                //x++
-            }
-            if (key_left) {
-                g.setColor(Color.BLUE);
-                //x--
-            }
 
-            g.fillRect(0, 0, afmetingVakje, afmetingVakje);
         }
 
         private void tekenCell(Graphics g, PlayBoard board, int i, int j) {
@@ -150,24 +188,24 @@ class UI extends JFrame {
             else
                 g.setColor(Color.white);
 
-            g.fillRect(j * afmetingVakje, i * afmetingVakje, afmetingVakje, afmetingVakje);
+            g.fillRect(i * afmetingVakje, j * afmetingVakje, afmetingVakje, afmetingVakje);
         }
     }
-    private class KeyInput implements KeyListener {
-        public void keyTyped(KeyEvent e) {}
 
-        public void keyReleased(KeyEvent e) {
-            if (e.getKeyCode() == e.VK_DOWN) key_down = false;
-            if (e.getKeyCode() == e.VK_UP) key_up= false;
-            if (e.getKeyCode() == e.VK_RIGHT) key_right= false;
-            if (e.getKeyCode() == e.VK_LEFT) key_left = false;
+    public static void infoBox(String infoMessage, String titleBar)
+    {
+        JOptionPane.showMessageDialog(null, infoMessage, titleBar, JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    public void checkGame() {
+        boolean won = true;// won = game.givestatusonWinning
+        boolean lost = false;// lost = game.givestatusonLosing
+
+        if (won) {
+            infoBox("Congratulations you have won the game! Now you can call yourself a real hero!", "Great job!");
         }
-
-        public void keyPressed(KeyEvent e) {
-            if (e.getKeyCode() == e.VK_DOWN) key_down = true;
-            if (e.getKeyCode() == e.VK_UP) key_up= true;
-            if (e.getKeyCode() == e.VK_RIGHT) key_right= true;
-            if (e.getKeyCode() == e.VK_LEFT) key_left = true;
+        if (lost) {
+            infoBox("Oh no, how sad.... \n you lost. Try Again!", "Lost");
         }
     }
 }
