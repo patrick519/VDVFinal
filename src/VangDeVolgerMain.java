@@ -7,6 +7,7 @@ public class VangDeVolgerMain {
         bord.SetRandom(5,25);
         UI ui = new UI(bord);
 
+
     }
 
     public static void main(String[] args){
