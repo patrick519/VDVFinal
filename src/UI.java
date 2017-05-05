@@ -15,9 +15,6 @@ class UI extends JFrame {
     public PlayBoard bord;
     public JTable var6;
 
-
-
-
     public UI(PlayBoard var1) {
         super();
         panel = new JPanel();
@@ -82,9 +79,6 @@ class UI extends JFrame {
         c.gridx = 2;
         panel.add(var6, c);
 
-
-
-
     }
 
     public void repaint() {
@@ -118,11 +112,11 @@ class UI extends JFrame {
         private void tekenCell(Graphics g, PlayBoard board, int i, int j) {
             g.setColor(Color.yellow);
             if (board.IsObject(i,j)) {
-                System.out.println("i:" + i + " j:" + j + " " + board.Display(i,j));
+
                 g.setColor(getCellcolor(board.Display(i,j)));
             }
 
-            g.fillRect(i * afmetingVakje, j * afmetingVakje, afmetingVakje, afmetingVakje);
+            g.fillRect(j * afmetingVakje, i * afmetingVakje, afmetingVakje, afmetingVakje);
         }
 
         private Color getCellcolor(String input) {

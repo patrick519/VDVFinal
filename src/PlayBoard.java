@@ -6,121 +6,107 @@ import java.util.List;
 import java.util.Random;
 
 public class PlayBoard {
-    public int maxX;
-    public int maxY;
-    private int boardSize;
-    public Object[][] baseBoard;
 
-    public PlayBoard(int var1, int var2) {
-        this.maxX = var1;
-        this.maxY = var2;
-        this.boardSize = var1 * var2;
-        this.baseBoard = new Object[var1][var2];
+    //Constructor
+    public PlayBoard(int x, int y) {
+        this.maxX = x;
+        this.maxY = y;
+        this.boardSize = x * y;
+        this.baseBoard = new Object[x][y];
 
         //setting the cells in the structure
-        for(int var3 = 0; var3 < var1; ++var3) {
-            for(int var4 = 0; var4 < var2; ++var4) {
-                this.baseBoard[var3][var4] = new  Cell();
-            }
-        }
+        for(int i = 0; i < x; i++)
+            for(int j = 0; j < y; j++)
+                this.baseBoard[i][j] = new Cell();
 
-        this.SetNeigbors();
+        this.SetNeighbors();
         this.SetPlayer();
         this.SetEnemy();
-    }
+    } //PlayBoard
 
-    private Cell GetCell(int var1, int var2) {
-        Cell var3 = (Cell)this.baseBoard[var1][var2];
-        return var3;
-    }
+    //Support functions------------------------------------
 
-    private void SetNeigbors() {
-        for(int var2 = 0; var2 < this.maxX; ++var2) {
-            for(int var3 = 0; var3 < this.maxY; ++var3) {
-                Cell var1 = this.GetCell(var2, var3);
-                if(var2 < 0) {
-                    var1.L = this.GetCell(var2 - 1, var3);
-                }
+    private Cell GetCell(int x, int y) {
+        Cell cll = (Cell)this.baseBoard[x][y];
+        return cll;
+    } //GetCell
 
-                if(var2 > this.maxX) {
-                    var1.R = this.GetCell(var2 + 1, var3);
-                }
-
-                if(var3 < 0) {
-                    var1.T = this.GetCell(var2, var3 - 1);
-                }
-
-                if(var3 > this.maxY) {
-                    var1.B = this.GetCell(var2, var3 + 1);
-                }
-            }
-        }
-
-    }
+    private void SetNeighbors(){
+        Cell curr;
+        for (int i = 0; i < this.maxX; i++)
+            for (int j = 0; j < this.maxY; j++){
+                curr = this.GetCell(i,j);
+                if (i < 0) curr.L = this.GetCell(i-1,j);
+                if (i > this.maxX) curr.R = this.GetCell(i+1,j);
+                if (j < 0) curr.T = this.GetCell(i,j-1);
+                if (j > this.maxY) curr.B = this.GetCell(i,j+1);
+            } //for
+    } //SetNeighbors
 
     public void SetPlayer() {
-        Cell var1 = this.GetCell(0, 0);
-        var1.gobj = new Player();
-    }
+        Cell temp = this.GetCell(0, 0);
+        temp.gobj = new Player();
+    } //SetPlayer
 
     public void SetEnemy() {
-        Cell var1 = this.GetCell(this.maxX - 1, this.maxY - 1);
-        var1.gobj = new Enemy();
-    }
+        Cell temp = this.GetCell(this.maxX - 1, this.maxY - 1);
+        temp.gobj = new Enemy();
+    } //SetEnemy
 
-    public boolean IsObject(int var1, int var2) {
-        Cell var3 = this.GetCell(var1, var2);
-        return var3.gobj != null;
-    }
+    //Default operations-----------------------------------
 
-    public void SetBlock(int var1, int var2) {
-        Cell var3 = this.GetCell(var1, var2);
-        var3.gobj = new Block();
-    }
+    public boolean IsObject(int x, int y) {
+        Cell temp = this.GetCell(x,y);
+        return temp.gobj != null;
+    } //IsObject
 
-    public void SetBox(int var1, int var2) {
-        Cell var3 = this.GetCell(var1, var2);
-        var3.gobj = new Box();
-    }
+    public void SetBlock(int x, int y) {
+        Cell temp = this.GetCell(x,y);
+        temp.gobj = new Block();
+    } //SetBlock
 
-    public void DelObject(int var1, int var2) {
-        Cell var3 = this.GetCell(var1, var2);
-        var3.gobj = null;
-    }
+    public void SetBox(int x, int y) {
+        Cell temp = this.GetCell(x,y);
+        temp.gobj = new Box();
+    } //SetBox
 
-    public void SetRandom(int var1, int var2) {
-        Random var3 = new Random();
-        int var6 = this.boardSize * var1 / 100;
+    public void DelObject(int x, int y) {
+        Cell temp = this.GetCell(x,y);
+        temp.gobj = null;
+    } //DelObject
 
-        int var4;
-        int var5;
-        int var7;
-        for(var7 = 0; var7 < var6; ++var7) {
-            var4 = var3.nextInt(this.maxX);
-            var5 = var3.nextInt(this.maxY);
-            if(!this.IsObject(var4, var5)) {
-                this.SetBlock(var4, var5);
-            } else {
-                --var7;
-            }
-        }
+    public void SetRandom(int perBlk, int perBox){
+        Random rand = new Random();
+        int randX, randY, percent;
+        //fill % Blocks
+        percent = (boardSize*perBlk)/100;
+        for (int i = 0; i < percent; i++){
+            randX = rand.nextInt(this.maxX);
+            randY = rand.nextInt(this.maxY);
+            if (!IsObject(randX,randY))
+                SetBlock(randX,randY);
+            else
+                i--;
+        } //for
+        //fill % Boxes
+        percent = (boardSize*perBox)/100;
+        for (int i = 0; i < percent; i++){
+            randX = rand.nextInt(this.maxX);
+            randY = rand.nextInt(this.maxY);
+            if (!IsObject(randX,randY))
+                SetBox(randX,randY);
+            else
+                i--;
+        } //for
+    } //SetRandom
 
-        var6 = this.boardSize * var2 / 100;
+    //UI operations
+    public String Display(int x, int y){
+        Cell temp = this.GetCell(x,y);
+        return temp.gobj.getDisplay();
+    } //Display
 
-        for(var7 = 0; var7 < var6; ++var7) {
-            var4 = var3.nextInt(this.maxX);
-            var5 = var3.nextInt(this.maxY);
-            if(!this.IsObject(var4, var5)) {
-                this.SetBox(var4, var5);
-            } else {
-                --var7;
-            }
-        }
-
-    }
-
-    public String Display(int var1, int var2) {
-        Cell var3 = this.GetCell(var1, var2);
-        return var3.gobj.getDisplay();
-    }
+    public int maxX, maxY, boardSize;
+    //Declaring the 2D objectArray
+    public Object[][] baseBoard;
 }

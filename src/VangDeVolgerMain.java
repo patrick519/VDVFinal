@@ -2,10 +2,13 @@
  * Created by pepij on 4-5-2017.
  */
 public class VangDeVolgerMain {
+    PlayBoard bord;
+    UI ui;
+
     public VangDeVolgerMain() {
-        PlayBoard bord = new PlayBoard(10,10);
+        bord = new PlayBoard(10,10);
         bord.SetRandom(5,25);
-        UI ui = new UI(bord);
+        ui = new UI(bord);
 
 
     }
